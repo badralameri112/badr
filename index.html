@@ -1,1 +1,810 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موسوعة طبقات المحدثين وأسانيد الكتب الستة والمسانيد</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        islamic: {
+                            50: '#f4f7f4',
+                            100: '#e3ece3',
+                            200: '#c7dac7',
+                            600: '#2d6a4f',
+                            700: '#1b4332',
+                            800: '#081c15',
+                            gold: '#d4af37',
+                            sand: '#fcfaf2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Tahoma', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap');
+        body { font-family: 'Cairo', 'Tahoma', sans-serif; }
+        .amiri-font { font-family: 'Amiri', serif; }
+    </style>
+</head>
+<body class="bg-islamic-50 text-islamic-800 min-h-screen flex flex-col justify-between">
 
+    <!-- Header -->
+    <header class="bg-islamic-700 text-white shadow-md">
+        <div class="max-w-5xl mx-auto px-4 py-6 text-center">
+            <span class="inline-block bg-islamic-gold text-islamic-800 text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm">الكتب الستة والمسانيد - أسانيد الصحابة والتابعين</span>
+            <h1 class="text-3xl font-bold amiri-font">موسوعة طبقات المحدثين وأسانيد الصحابة</h1>
+            <p class="text-islamic-100 text-sm mt-1">ابدأ بأشهر الصحابة والرواة وتتبع أسانيدهم في الكتب الستة والمسانيد مع رابط كتب الرجال والشاملة</p>
+        </div>
+    </header>
+
+    <!-- Navigation Views Bar -->
+    <nav class="bg-white border-b border-islamic-100 shadow-sm sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 flex justify-center gap-4 py-3">
+            <button onclick="switchView('browse')" id="nav-browse" class="px-5 py-2 rounded-xl font-bold text-sm bg-islamic-700 text-white transition shadow-sm">
+                🌟 أشهر الصحابة والرواة
+            </button>
+            <button onclick="switchView('tree')" id="nav-tree" class="px-5 py-2 rounded-xl font-bold text-sm bg-white text-islamic-700 border border-islamic-200 transition hover:bg-islamic-50">
+                🔍 اختبار وبحث الأسانيد
+            </button>
+            <button onclick="toggleEduModal()" class="px-4 py-2 rounded-xl font-bold text-sm bg-islamic-gold text-islamic-800 transition shadow-sm flex items-center gap-1">
+                <span>💡</span> دليل المبتدئين
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-grow w-full">
+
+        <!-- VIEW 1: Browse Famous Sahabah & Narrators -->
+        <div id="view-browse" class="space-y-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-islamic-100 space-y-4">
+                <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+                    <div class="w-full md:w-1/2 relative">
+                        <span class="absolute right-3 top-3 text-gray-400">🔍</span>
+                        <input type="text" id="search-input" oninput="applyFilters()" placeholder="ابحث باسم الصحابي أو الراوي (مثل: محمد، عمر، أبو هريرة)..." class="w-full pl-4 pr-10 py-2.5 bg-islamic-50 border border-islamic-200 rounded-xl text-sm focus:outline-none focus:border-islamic-600 transition">
+                    </div>
+                    <div class="flex items-center gap-3 w-full md:w-auto justify-between">
+                        <span id="results-count" class="text-xs font-semibold bg-islamic-100 text-islamic-700 px-3 py-2 rounded-lg">عدد الشخصيات: 0</span>
+                        <button onclick="resetFilters()" class="text-xs text-red-600 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg transition font-semibold">إعادة ضبط</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="narrators-grid" class="grid grid-cols-1 gap-6"></div>
+        </div>
+
+        <!-- VIEW 2: Sanad Testing & Search Tool -->
+        <div id="view-tree" class="space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-islamic-100 space-y-4">
+                <h3 class="text-2xl font-bold text-islamic-700 amiri-font">اختبار أسانيد الكتب الستة والمسانيد</h3>
+                <p class="text-sm text-gray-600">ابحث عن الراوي، ثم اضغط على (اختيار) لبناء السند صعوداً حتى النبي ﷺ:</p>
+                
+                <div class="relative">
+                    <input type="text" id="sanad-search-input" oninput="searchSanadTools()" placeholder="اكتب اسم الصحابي أو الراوي للبحث الفوري..." class="w-full pl-4 pr-10 py-3 bg-islamic-50 border border-islamic-200 rounded-xl text-sm focus:outline-none focus:border-islamic-600 transition font-bold">
+                    <span class="absolute right-3 top-3.5 text-gray-400">🔎</span>
+                </div>
+
+                <!-- Active Chain Assembly Bar placed directly between search and counts/reset -->
+                <div id="sanad-chain-bar" class="bg-islamic-600 text-white p-4 rounded-xl shadow-md hidden space-y-3">
+                    <div class="flex justify-between items-center border-b border-islamic-500 pb-2">
+                        <span class="font-bold text-xs bg-islamic-gold text-islamic-800 px-2 py-0.5 rounded">شريط بناء الإسناد الجاري:</span>
+                        <button onclick="clearSanadChain()" class="text-xs bg-red-600 hover:bg-red-700 text-white px-2.5 py-1 rounded-lg">إعادة البدء</button>
+                    </div>
+                    <div id="sanad-chain-steps" class="flex flex-wrap gap-2 items-center text-xs"></div>
+                    <div id="sanad-chain-status" class="bg-white text-islamic-800 p-3 rounded-lg text-xs"></div>
+                </div>
+
+                <!-- Controls Bar requested directly below search & chain bar -->
+                <div class="flex items-center justify-between bg-islamic-50 p-3 rounded-xl border border-islamic-200">
+                    <span id="sanad-results-count" class="text-xs font-semibold bg-islamic-100 text-islamic-700 px-3 py-1.5 rounded-lg">عدد الشخصيات المطابقة: 0</span>
+                    <button onclick="resetSanadSearch()" class="text-xs text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition font-semibold">إعادة ضبط</button>
+                </div>
+
+                <div id="sanad-search-results" class="grid grid-cols-1 gap-4 mt-4"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Narrator Detail Modal -->
+    <div id="narrator-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-islamic-200 my-8">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <button id="modal-back-btn" onclick="goBackModal()" class="hidden bg-islamic-100 hover:bg-islamic-200 text-islamic-800 px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                        <span>⬅️</span> رجوع للبطاقة السابقة
+                    </button>
+                    <span id="modal-id-badge" class="text-xs bg-islamic-gold text-islamic-800 font-bold px-2 py-0.5 rounded-md">رقم</span>
+                </div>
+                <button onclick="closeNarratorModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <div id="modal-content" class="space-y-4 max-h-[70vh] overflow-y-auto pl-2"></div>
+
+            <div class="mt-6 pt-4 border-t flex justify-end">
+                <button onclick="closeNarratorModal()" class="bg-islamic-600 hover:bg-islamic-700 text-white px-6 py-2 rounded-xl text-sm transition font-semibold">إغلاق البطاقة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Sub-Modal for Works or Narrations -->
+    <div id="sub-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-islamic-200 space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h4 id="sub-modal-title" class="text-lg font-bold text-islamic-700 amiri-font">عنوان القائمة</h4>
+                <button onclick="closeSubModal()" class="text-gray-400 hover:text-gray-700 text-xl font-bold">&times;</button>
+            </div>
+            <div id="sub-modal-body" class="space-y-3 text-sm text-gray-700 max-h-[60vh] overflow-y-auto pr-1"></div>
+            <div class="text-center pt-2">
+                <button onclick="closeSubModal()" class="bg-islamic-700 text-white px-4 py-1.5 rounded-lg text-xs">إغلاق القائمة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Educational Modal -->
+    <div id="edu-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-islamic-200">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-lg font-bold text-islamic-700 amiri-font">دليل المبتدئين لدراسة الأسانيد</h3>
+                <button onclick="toggleEduModal()" class="text-gray-400 hover:text-gray-700 text-xl font-bold">&times;</button>
+            </div>
+            <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
+                <p><strong>1. اختبار الأسانيد:</strong> ابحث عن أي راوٍ في قسم البحث واضغط على زر (اختيار) لبناء السند صعوداً حتى النبي ﷺ مع بيان حكم صحة السند وعلله.</p>
+                <p><strong>2. كتب الرجال:</strong> تتيح لك البطاقة الاطلاع على موضع سيرة الراوي في أمهات كتب التراجم والمكتبة الشاملة.</p>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="toggleEduModal()" class="bg-islamic-600 hover:bg-islamic-700 text-white px-6 py-2 rounded-xl text-sm">حسناً، فهمت</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-islamic-100 py-4 text-center text-xs text-gray-500 mt-12">
+        <p>موسوعة طبقات المحدثين وأسانيد الكتب الستة والمسانيد © 2026</p>
+    </footer>
+
+    <!-- Script -->
+    <script>
+        const narratorsDB = [
+            {
+                id: 1,
+                name: "أبو هريرة الدوسي رضي الله عنه",
+                city: "المدينة المنورة",
+                death: "توفي سنة 59 هـ",
+                layer: 1,
+                layerName: "الطبقة الأولى: كبار الصحابة المكثرين",
+                shuyukh: [0], // النبي محمد ﷺ
+                talamidh: [3, 4, 8],
+                works: [
+                    { title: "صحيفة أبي هريرة رضي الله عنه", shamilahUrl: "https://shamela.ws/book/12345" }
+                ],
+                biographyBooks: [
+                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
+                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" },
+                    { name: "سير أعلام النبلاء (الذهبي)", url: "https://shamela.ws/book/1741" }
+                ],
+                narrations: [
+                    { 
+                        title: "حديث: من صام رمضان إيمانًا واحتسابًا", 
+                        full: "عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ: «من صام رمضان إيمانًا احتسابًا غفر له ما تقدم من ذنبه».",
+                        takhrij: "رواه البخاري (رقم 38) ومسلم (رقم 760)",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح (صحيح الجامع رقم 6323)"
+                    }
+                ],
+                jarh: "أحفظ الصحابة وأكثرهم رواية للحديث (ثقة جليل)",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "لا يوجد انقطاع أو علة قادحة، السند في أصح كتب الحديث."
+            },
+            {
+                id: 2,
+                name: "عمر بن الخطاب الفاروق رضي الله عنه",
+                city: "المدينة المنورة",
+                death: "توفي سنة 23 هـ",
+                layer: 1,
+                layerName: "الطبقة الأولى: الصحابة الكرام",
+                shuyukh: [0],
+                talamidh: [3, 5],
+                works: [],
+                biographyBooks: [
+                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
+                    { name: "سير أعلام النبلاء (الذهبي)", url: "https://shamela.ws/book/1741" }
+                ],
+                narrations: [
+                    { 
+                        title: "حديث: إنما الأعمال بالنيات", 
+                        full: "عن عمر بن الخطاب رضي الله عنه على المنبر قال: سمعت رسول الله ﷺ يقول: «إنما الأعمال بالنيات وإنما لكل امرئ ما نوى...».",
+                        takhrij: "رواه البخاري (رقم 1) ومسلم (رقم 1907)",
+                        hukm: "صحيح متصل متواتر المعنى",
+                        albani: "صحيح (صحيح أبي داود رقم 2201)"
+                    }
+                ],
+                jarh: "أمير المؤمنين، ثقة ثبت (صحابي جليل)",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "من أصح الأسانيد (أحاديث الآحاد المتلقاة بالقبول)."
+            },
+            {
+                id: 3,
+                name: "سعيد بن المسيب رحمه الله",
+                city: "المدينة المنورة",
+                death: "توفي سنة 94 هـ",
+                layer: 2,
+                layerName: "الطبقة الثانية: كبار التابعين",
+                shuyukh: [1, 2],
+                talamidh: [6, 9],
+                works: [
+                    { title: "فتاوى وأقضية سعيد بن المسيب", shamilahUrl: "https://shamela.ws/book/23456" }
+                ],
+                biographyBooks: [
+                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
+                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" },
+                    { name: "الجرح والتعديل (ابن أبي حاتم)", url: "https://shamela.ws/book/2170" }
+                ],
+                narrations: [
+                    { 
+                        title: "مرويات سعيد عن أبي هريرة", 
+                        full: "عن سعيد بن المسيب عن أبي هريرة رضي الله عنه عن النبي ﷺ...",
+                        takhrij: "رواه البخاري ومسلم في الصحيحين",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "سيد التابعين، إمام أهل المدينة وثقتها (تقريب التهذيب)",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "مرسلات سعيد بن المسيب أصح المراسيل عند المحدثين، وهنا موصول عن أبي هريرة وعمر."
+            },
+            {
+                id: 4,
+                name: "عائشة أم المؤمنين رضي الله عنها",
+                city: "المدينة المنورة",
+                death: "توفي سنة 57 هـ",
+                layer: 1,
+                layerName: "الطبقة الأولى: أمهات المؤمنين",
+                shuyukh: [0],
+                talamidh: [3, 8],
+                works: [],
+                biographyBooks: [
+                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
+                    { name: "سير أعلام النبلاء (الذهبي)", url: "https://shamela.ws/book/1741" }
+                ],
+                narrations: [
+                    { 
+                        title: "حديث: من أحدث في أمرنا هذا", 
+                        full: "عن عائشة رضي الله عنها قالت: قال رسول الله ﷺ: «من أحدث في أمرنا هذا ما ليس منه فهو رد».",
+                        takhrij: "رواه البخاري (رقم 2697) ومسلم (رقم 1718)",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح (صحيح ابن ماجه رقم 14)"
+                    }
+                ],
+                jarh: "فقيهة الأمة، ثقة ثبت",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "سند متصل صحيح لا علة فيه."
+            },
+            {
+                id: 5,
+                name: "علقمة بن قيس النخعي الكوفي",
+                city: "الكوفة",
+                death: "توفي سنة 62 هـ",
+                layer: 3,
+                layerName: "الطبقة الثالثة: كبار التابعين",
+                shuyukh: [2],
+                talamidh: [6],
+                works: [],
+                biographyBooks: [
+                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
+                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" }
+                ],
+                narrations: [
+                    { 
+                        title: "مروياته عن عمر في الهجرة والأعمال", 
+                        full: "عن علقمة بن قيس عن عمر بن الخطاب رضي الله عنه...",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "ثقة ثبت فقيه كبير (تقريب التهذيب)",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "سند كوفي متصل صحيح."
+            },
+            {
+                id: 6,
+                name: "مالك بن أنس الأصفحي الإمام",
+                city: "المدينة المنورة",
+                death: "توفي سنة 179 هـ",
+                layer: 7,
+                layerName: "الطبقة السابعة: أتباع التابعين",
+                shuyukh: [3, 9],
+                talamidh: [7],
+                works: [
+                    { title: "الموطأ للإمام مالك", shamilahUrl: "https://shamela.ws/book/1111" }
+                ],
+                biographyBooks: [
+                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
+                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" },
+                    { name: "سير أعلام النبلاء (الذهبي)", url: "https://shamela.ws/book/1741" }
+                ],
+                narrations: [
+                    { 
+                        title: "أحاديث الموطأ عن نافع عن ابن عمر", 
+                        full: "عن مالك عن نافع عن عبد الله بن عمر رضي الله عنهما أن رسول الله ﷺ قال...",
+                        takhrij: "رواه مالك في الموطأ والبخاري ومسلم",
+                        hukm: "صحيح (أصح الأسانيد)",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "إمام دار الهجرة، حجة ثبت",
+                sanadGrade: "صحيح (سلسلة الذهب)",
+                sanadFaults: "من أصح الأسانيد مطلقاً (مالك عن نافع عن ابن عمر)."
+            },
+            {
+                id: 7,
+                name: "محمد بن إسماعيل البخاري الإمام",
+                city: "بخارى",
+                death: "توفي سنة 256 هـ",
+                layer: 12,
+                layerName: "الطبقة الثانية عشرة: صاحب الصحيح",
+                shuyukh: [6],
+                talamidh: [],
+                works: [
+                    { title: "الجامع الصحيح (صحيح البخاري)", shamilahUrl: "https://shamela.ws/book/1709" },
+                    { title: "الأدب المفرد", shamilahUrl: "https://shamela.ws/book/1715" }
+                ],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (الذهبي)", url: "https://shamela.ws/book/1741" }
+                ],
+                narrations: [
+                    { 
+                        title: "مقدمة صحيح البخاري", 
+                        full: "حدثنا الحميدي عبد الله بن الزبير قال: حدثنا سفيان قال: حدثنا يحيى بن سعيد الأنصاري قال: أخبرني محمد بن إبراهيم التيمي أنه سمع علقمة بن وقاص الليثي يقول: سمعت عمر بن الخطاب رضي الله عنه على المنبر يقول: سمعت رسول الله ﷺ يقول: «إنما الأعمال بالنيات...».",
+                        takhrij: "رواه البخاري في أول صحيحه",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "أمير المؤمنين في الحديث، ثقة حافظ إمام",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "أصح كتاب بعد كتاب الله عز وجل."
+            },
+            {
+                id: 8,
+                name: "محمد بن سيرين البصري الإمام",
+                city: "البصرة",
+                death: "توفي سنة 110 هـ",
+                layer: 3,
+                layerName: "الطبقة الثالثة: وسطى التابعين",
+                shuyukh: [1, 4],
+                talamidh: [6],
+                works: [
+                    { title: "جزء في تعبير الرؤيا والآثار", shamilahUrl: "" }
+                ],
+                biographyBooks: [
+                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
+                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" }
+                ],
+                narrations: [
+                    { 
+                        title: "مروياته عن أبي هريرة في الصيام", 
+                        full: "عن محمد بن سيرين عن أبي هريرة رضي الله عنه...",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "ثقة ثبت، إمام في العلم والورع (تقريب التهذيب)",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "روايته عن أبي هريرة صحيحة وثابتة المعاصرة والسماع."
+            },
+            {
+                id: 9,
+                name: "محمد بن شهاب الزهري الإمام",
+                city: "المدينة المنورة",
+                death: "توفي سنة 124 هـ",
+                layer: 4,
+                layerName: "الطبقة الرابعة: صغار التابعين",
+                shuyukh: [3],
+                talamidh: [6],
+                works: [
+                    { title: "نسخة الزهري في الحديث", shamilahUrl: "" }
+                ],
+                biographyBooks: [
+                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
+                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" },
+                    { name: "الجرح والتعديل (ابن أبي حاتم)", url: "https://shamela.ws/book/2170" }
+                ],
+                narrations: [
+                    { 
+                        title: "حديث الأعرابي والوضوء", 
+                        full: "عن ابن شهاب الزهري عن أنس بن مالك...",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "فقيه حافظ متفق على جلالته وثاقته (تقريب التهذيب)",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "مدار كثير من الأسانيد المدنية الصحيحة."
+            }
+        ];
+
+        let modalHistoryStack = [];
+        let activeSanadChain = []; // stores narrator IDs in current active chain building
+
+        window.onload = function() {
+            applyFilters();
+            searchSanadTools();
+        };
+
+        function switchView(viewName) {
+            const browse = document.getElementById('view-browse');
+            const tree = document.getElementById('view-tree');
+            const navBrowse = document.getElementById('nav-browse');
+            const navTree = document.getElementById('nav-tree');
+
+            if (viewName === 'browse') {
+                browse.classList.remove('hidden');
+                tree.classList.add('hidden');
+                navBrowse.className = "px-5 py-2 rounded-xl font-bold text-sm bg-islamic-700 text-white transition shadow-sm";
+                navTree.className = "px-5 py-2 rounded-xl font-bold text-sm bg-white text-islamic-700 border border-islamic-200 transition";
+            } else {
+                browse.classList.add('hidden');
+                tree.classList.remove('hidden');
+                navTree.className = "px-5 py-2 rounded-xl font-bold text-sm bg-islamic-700 text-white transition shadow-sm";
+                navBrowse.className = "px-5 py-2 rounded-xl font-bold text-sm bg-white text-islamic-700 border border-islamic-200 transition";
+                searchSanadTools();
+            }
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const filtered = narratorsDB.filter(n => 
+                n.name.toLowerCase().includes(query) || 
+                n.city.toLowerCase().includes(query) || 
+                n.id.toString() === query
+            );
+            document.getElementById('results-count').innerText = `عدد الشخصيات: ${filtered.length}`;
+            renderGrid(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            applyFilters();
+        }
+
+        function renderGrid(list) {
+            const grid = document.getElementById('narrators-grid');
+            if (list.length === 0) {
+                grid.innerHTML = `<div class="bg-white rounded-2xl p-8 text-center text-gray-500 border">لا توجد نتائج مطابقة.</div>`;
+                return;
+            }
+
+            grid.innerHTML = list.map(n => `
+                <div class="bg-white rounded-2xl shadow-sm border border-islamic-100 p-6 space-y-4">
+                    <div class="flex justify-between items-start border-b pb-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-islamic-100 text-islamic-700 text-xs px-2.5 py-1 rounded font-bold">رقم: ${n.id}</span>
+                                <span class="bg-islamic-gold/20 text-islamic-800 text-xs px-2.5 py-1 rounded font-bold">${n.layerName}</span>
+                            </div>
+                            <h4 class="text-2xl font-bold text-islamic-800 amiri-font">${n.name}</h4>
+                            <p class="text-xs text-gray-500 mt-1">📍 المدينة: ${n.city} | 📅 ${n.death}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-islamic-50 p-3 rounded-xl text-xs space-y-1">
+                        <strong class="text-islamic-700 block">⚖️ الجرح والتعديل:</strong>
+                        <p class="text-gray-700">${n.jarh}</p>
+                    </div>
+
+                    <!-- سيرة الراوي في كتب الرجال والمكتبة الشاملة -->
+                    <div class="bg-islamic-sand border border-islamic-200 p-3 rounded-xl text-xs space-y-2">
+                        <strong class="text-islamic-800 block flex items-center gap-1"><span>📚</span> سيرة الراوي في كتب الرجال (المكتبة الشاملة):</strong>
+                        <div class="flex flex-wrap gap-2">
+                            ${n.biographyBooks.map(b => `
+                                <a href="${b.url}" target="_blank" class="bg-white border border-islamic-200 text-islamic-700 hover:bg-islamic-700 hover:text-white px-2.5 py-1 rounded-lg transition font-bold flex items-center gap-1">
+                                    <span>📖 ${b.name}</span>
+                                    <span class="text-[10px]">↗️</span>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="openSubModalList(${n.id}, 'works')" class="flex-1 bg-islamic-gold/20 hover:bg-islamic-gold/30 border border-islamic-gold text-islamic-800 text-xs py-2 rounded-lg font-bold transition">
+                            📚 المؤلفات والصحف (${n.works.length})
+                        </button>
+                        <button onclick="openSubModalList(${n.id}, 'narrations')" class="flex-1 bg-islamic-600 hover:bg-islamic-700 text-white text-xs py-2 rounded-lg font-bold transition">
+                            📖 المرويات والأحاديث (${n.narrations.length})
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs bg-islamic-50/50 p-3 rounded-xl">
+                        <div>
+                            <strong class="text-islamic-700 block mb-1">الشيوخ:</strong>
+                            <div class="flex flex-wrap gap-1">
+                                ${n.shuyukh.includes(0) ? '<span class="bg-islamic-gold/30 text-islamic-800 px-2 py-1 rounded font-bold">النبي محمد ﷺ</span>' : ''}
+                                ${n.shuyukh.filter(id => id > 0).map(id => {
+                                    const s = narratorsDB.find(x => x.id === id);
+                                    return `<button onclick="openNarratorModal(${id})" class="bg-white border px-2 py-1 rounded hover:bg-islamic-600 hover:text-white transition">${s ? s.name : id}</button>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                        <div>
+                            <strong class="text-islamic-700 block mb-1">التلاميذ:</strong>
+                            <div class="flex flex-wrap gap-1">
+                                ${n.talamidh.length > 0 ? n.talamidh.map(id => {
+                                    const t = narratorsDB.find(x => x.id === id);
+                                    return `<button onclick="openNarratorModal(${id})" class="bg-white border px-2 py-1 rounded hover:bg-islamic-600 hover:text-white transition">${t ? t.name : id}</button>`;
+                                }).join('') : '<span class="text-gray-400">غير متوفر</span>'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openNarratorModal(id, pushHistory = true) {
+            const n = narratorsDB.find(x => x.id === id);
+            if (!n) return;
+
+            const currentModalId = document.getElementById('narrator-modal').dataset.currentId;
+            if (pushHistory && currentModalId) {
+                modalHistoryStack.push(parseInt(currentModalId));
+            }
+            document.getElementById('narrator-modal').dataset.currentId = n.id;
+
+            const backBtn = document.getElementById('modal-back-btn');
+            if (modalHistoryStack.length > 0) {
+                backBtn.classList.remove('hidden');
+            } else {
+                backBtn.classList.add('hidden');
+            }
+
+            document.getElementById('modal-id-badge').innerText = `راوي رقم: ${n.id}`;
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `
+                <div>
+                    <h3 class="text-2xl font-bold text-islamic-800 amiri-font mb-1">${n.name}</h3>
+                    <p class="text-xs text-islamic-gold font-semibold">${n.layerName}</p>
+                    <p class="text-xs text-gray-500 mt-1">📍 البلد: ${n.city} | 📅 ${n.death}</p>
+                </div>
+                <hr>
+                <div class="bg-islamic-50 p-3 rounded-xl text-xs space-y-1">
+                    <strong class="text-islamic-700 block">⚖️ الجرح والتعديل:</strong>
+                    <p>${n.jarh}</p>
+                </div>
+                <!-- سيرة الراوي في كتب الرجال داخل النافذة المنبثقة -->
+                <div class="bg-islamic-sand border border-islamic-200 p-3 rounded-xl text-xs space-y-2">
+                    <strong class="text-islamic-800 block flex items-center gap-1"><span>📚</span> سيرة الراوي في كتب الرجال (المكتبة الشاملة):</strong>
+                    <div class="flex flex-wrap gap-2">
+                        ${n.biographyBooks.map(b => `
+                            <a href="${b.url}" target="_blank" class="bg-white border border-islamic-200 text-islamic-700 hover:bg-islamic-700 hover:text-white px-2.5 py-1 rounded-lg transition font-bold flex items-center gap-1">
+                                <span>📖 ${b.name}</span>
+                                <span class="text-[10px]">↗️</span>
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="openSubModalList(${n.id}, 'works')" class="flex-1 bg-islamic-gold/20 hover:bg-islamic-gold/30 border border-islamic-gold text-islamic-800 text-xs py-2 rounded-lg font-bold">
+                        📚 المؤلفات والصحف (${n.works.length})
+                    </button>
+                    <button onclick="openSubModalList(${n.id}, 'narrations')" class="flex-1 bg-islamic-600 text-white text-xs py-2 rounded-lg font-bold">
+                        📖 المرويات والأحاديث (${n.narrations.length})
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-islamic-50 p-3 rounded-xl">
+                    <div>
+                        <strong class="text-islamic-700 block mb-1">الشيوخ:</strong>
+                        <div class="flex flex-wrap gap-1">
+                            ${n.shuyukh.includes(0) ? '<span class="bg-islamic-gold/30 text-islamic-800 px-2 py-0.5 rounded font-bold">النبي ﷺ</span>' : ''}
+                            ${n.shuyukh.filter(id => id > 0).map(id => {
+                                const s = narratorsDB.find(x => x.id === id);
+                                return `<button onclick="openNarratorModal(${id})" class="bg-white border px-2 py-0.5 rounded hover:bg-islamic-600 hover:text-white">${s ? s.name : id}</button>`;
+                            }).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <strong class="text-islamic-700 block mb-1">التلاميذ:</strong>
+                        <div class="flex flex-wrap gap-1">
+                            ${n.talamidh.length > 0 ? n.talamidh.map(id => {
+                                const t = narratorsDB.find(x => x.id === id);
+                                return `<button onclick="openNarratorModal(${id})" class="bg-white border px-2 py-0.5 rounded hover:bg-islamic-600 hover:text-white">${t ? t.name : id}</button>`;
+                            }).join('') : 'لا يوجد'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('narrator-modal').classList.remove('hidden');
+        }
+
+        function goBackModal() {
+            if (modalHistoryStack.length > 0) {
+                const prevId = modalHistoryStack.pop();
+                openNarratorModal(prevId, false);
+            }
+        }
+
+        function closeNarratorModal() {
+            modalHistoryStack = [];
+            document.getElementById('narrator-modal').classList.add('hidden');
+        }
+
+        function openSubModalList(narratorId, type) {
+            const n = narratorsDB.find(x => x.id === narratorId);
+            if (!n) return;
+            const title = type === 'works' ? `المؤلفات والكتب لـ: ${n.name}` : `مرويات وأحاديث الكتب الستة لـ: ${n.name}`;
+            document.getElementById('sub-modal-title').innerText = title;
+            const body = document.getElementById('sub-modal-body');
+
+            if (type === 'works') {
+                if (n.works.length === 0) {
+                    body.innerHTML = `<p class="text-gray-500 text-center py-4">لا توجد مؤلفات مستقلة مسجلة في زمانه.</p>`;
+                } else {
+                    body.innerHTML = n.works.map(w => {
+                        if (w.shamilahUrl) {
+                            return `<div class="bg-islamic-50 p-2.5 rounded-lg border border-islamic-100 font-bold flex justify-between items-center text-xs">
+                                <span>• ${w.title}</span>
+                                <a href="${w.shamilahUrl}" target="_blank" class="bg-islamic-700 text-white px-3 py-1 rounded hover:bg-islamic-800 transition text-[11px]">فتح في الشاملة ↗️</a>
+                            </div>`;
+                        } else {
+                            return `<div class="bg-islamic-50 p-2.5 rounded-lg border border-islamic-100 font-bold text-xs">• ${w.title}</div>`;
+                        }
+                    }).join('');
+                }
+            } else {
+                if (n.narrations.length === 0) {
+                    body.innerHTML = `<p class="text-gray-500 text-center py-4">لا توجد مرويات مسجلة.</p>`;
+                } else {
+                    body.innerHTML = n.narrations.map((nar, idx) => `
+                        <div class="bg-islamic-50 p-3 rounded-xl border border-islamic-100 space-y-2">
+                            <button onclick="toggleNarrationFull(${narratorId}, ${idx})" class="w-full text-right font-bold text-islamic-700 hover:text-islamic-800 flex justify-between items-center text-xs">
+                                <span>📌 ${nar.title}</span>
+                                <span class="text-[10px] bg-islamic-200 px-2 py-0.5 rounded">عرض الحديث والتخريج</span>
+                            </button>
+                            <div id="narration-full-${narratorId}-${idx}" class="hidden text-xs text-gray-700 bg-white p-3 rounded-lg border space-y-2 mt-2 leading-relaxed">
+                                <p class="font-bold text-islamic-800">متن الرواية:</p>
+                                <p class="bg-islamic-50 p-2 rounded">${nar.full}</p>
+                                <p><strong>التخريج:</strong> <span class="text-gray-600">${nar.takhrij}</span></p>
+                                <p><strong>الحكم على السند:</strong> <span class="text-green-700 font-bold">${nar.hukm}</span></p>
+                                <p><strong>حكم الألباني:</strong> <span class="text-islamic-700 font-bold">${nar.albani}</span></p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+            document.getElementById('sub-modal').classList.add('hidden');
+            document.getElementById('sub-modal').classList.remove('hidden');
+        }
+
+        function toggleNarrationFull(narratorId, idx) {
+            const el = document.getElementById(`narration-full-${narratorId}-${idx}`);
+            if (el) {
+                el.classList.toggle('hidden');
+            }
+        }
+
+        function closeSubModal() {
+            document.getElementById('sub-modal').classList.add('hidden');
+        }
+
+        function searchSanadTools() {
+            const query = document.getElementById('sanad-search-input').value.toLowerCase().trim();
+            const container = document.getElementById('sanad-search-results');
+            const filtered = narratorsDB.filter(n => n.name.toLowerCase().includes(query) || n.city.toLowerCase().includes(query));
+
+            document.getElementById('sanad-results-count').innerText = `عدد الشخصيات المطابقة: ${filtered.length}`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="bg-white rounded-xl p-6 text-center text-gray-500 border">لا توجد نتائج مطابقة للبحث في أسانيد الكتب الستة والمسانيد.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(n => `
+                <div class="bg-white border border-islamic-200 p-5 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <span class="text-xs bg-islamic-gold text-islamic-800 font-bold px-2.5 py-1 rounded">${n.layerName}</span>
+                        <h4 class="text-xl font-bold text-islamic-800 amiri-font mt-1">${n.name}</h4>
+                        <p class="text-xs text-gray-500 mt-1">📍 البلد: ${n.city} | 📅 ${n.death}</p>
+                        <p class="text-xs text-gray-600 mt-1">⚖️ ${n.jarh}</p>
+                    </div>
+                    <button onclick="startSanadChain(${n.id})" class="bg-islamic-700 hover:bg-islamic-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2">
+                        <span>🎯 اختيار</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function resetSanadSearch() {
+            document.getElementById('sanad-search-input').value = '';
+            clearSanadChain();
+            searchSanadTools();
+        }
+
+        function startSanadChain(id) {
+            activeSanadChain = [id];
+            renderActiveSanadChain();
+            document.getElementById('sanad-chain-bar').classList.remove('hidden');
+            document.getElementById('sanad-chain-bar').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function clearSanadChain() {
+            activeSanadChain = [];
+            document.getElementById('sanad-chain-bar').classList.add('hidden');
+            document.getElementById('sanad-chain-steps').innerHTML = '';
+            document.getElementById('sanad-chain-status').innerHTML = '';
+        }
+
+        function addTeacherToChain(teacherId) {
+            activeSanadChain.push(teacherId);
+            renderActiveSanadChain();
+        }
+
+        function renderActiveSanadChain() {
+            const stepsContainer = document.getElementById('sanad-chain-steps');
+            const statusContainer = document.getElementById('sanad-chain-status');
+
+            let stepsHtml = '';
+            let reachedProphet = false;
+
+            activeSanadChain.forEach((nId, idx) => {
+                const n = narratorsDB.find(x => x.id === nId);
+                if (!n) return;
+
+                stepsHtml += `
+                    <div class="bg-white text-islamic-800 border px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 shadow-sm">
+                        <span>${n.name}</span>
+                        ${idx < activeSanadChain.length - 1 ? '<span class="text-islamic-700 font-bold"> ⬅️ عن </span>' : ''}
+                    </div>
+                `;
+
+                if (n.shuyukh.includes(0)) {
+                    reachedProphet = true;
+                }
+            });
+
+            stepsContainer.innerHTML = stepsHtml;
+
+            const currentNodeId = activeSanadChain[activeSanadChain.length - 1];
+            const currentNode = narratorsDB.find(x => x.id === currentNodeId);
+
+            if (reachedProphet) {
+                statusContainer.innerHTML = `
+                    <div class="space-y-2 bg-islamic-gold/10 p-3 rounded-lg border border-islamic-gold">
+                        <span class="text-xs font-bold text-islamic-800 block">✨ تم الوصول إلى النبي محمد صلى الله عليه وسلم!</span>
+                        <p class="text-xs text-gray-700"><strong>حكم السند:</strong> <span class="text-green-700 font-bold">${currentNode.sanadGrade}</span></p>
+                        <p class="text-xs text-gray-700"><strong>العلل ودراسة الانقطاع:</strong> ${currentNode.sanadFaults}</p>
+                    </div>
+                `;
+            } else if (currentNode && currentNode.shuyukh.length > 0) {
+                let teacherButtons = currentNode.shuyukh.map(shId => {
+                    const sh = narratorsDB.find(x => x.id === shId);
+                    return `<button onclick="addTeacherToChain(${shId})" class="bg-islamic-700 hover:bg-islamic-800 text-white px-3 py-1.5 rounded-lg font-bold transition">${sh ? sh.name : shId}</button>`;
+                }).join(' ');
+
+                statusContainer.innerHTML = `
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold text-islamic-700 block">اختر شيخ هذا الراوي صعوداً في السند:</span>
+                        <div class="flex flex-wrap gap-2">${teacherButtons}</div>
+                    </div>
+                `;
+            } else {
+                statusContainer.innerHTML = `<p class="text-xs text-red-600 font-bold">انتهت الشيوخ أو حصل انقطاع في السند.</p>`;
+            }
+        }
+
+        function toggleEduModal() {
+            document.getElementById('edu-modal').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
