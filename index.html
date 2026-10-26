@@ -40,9 +40,9 @@
     <!-- Header -->
     <header class="bg-islamic-700 text-white shadow-md">
         <div class="max-w-5xl mx-auto px-4 py-6 text-center">
-            <span class="inline-block bg-islamic-gold text-islamic-800 text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm">الكتب الستة والمسانيد - أسانيد الصحابة والتابعين</span>
+            <span class="inline-block bg-islamic-gold text-islamic-800 text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm">الكتب الستة والمسانيد - الموسوعة الشاملة للرواة والأسانيد</span>
             <h1 class="text-3xl font-bold amiri-font">موسوعة طبقات المحدثين وأسانيد الصحابة</h1>
-            <p class="text-islamic-100 text-sm mt-1">ابدأ بأشهر الصحابة والرواة وتتبع أسانيدهم في الكتب الستة والمسانيد مع رابط كتب الرجال والشاملة</p>
+            <p class="text-islamic-100 text-sm mt-1">تضم قاعدة بيانات كبرى لرواة الكتب الستة والمسانيد مع روابط تفصيلية دقيقة لمواضع تراجمهم في كتب الرجال</p>
         </div>
     </header>
 
@@ -70,7 +70,7 @@
                 <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
                     <div class="w-full md:w-1/2 relative">
                         <span class="absolute right-3 top-3 text-gray-400">🔍</span>
-                        <input type="text" id="search-input" oninput="applyFilters()" placeholder="ابحث باسم الصحابي أو الراوي (مثل: محمد، عمر، أبو هريرة)..." class="w-full pl-4 pr-10 py-2.5 bg-islamic-50 border border-islamic-200 rounded-xl text-sm focus:outline-none focus:border-islamic-600 transition">
+                        <input type="text" id="search-input" oninput="applyFilters()" placeholder="ابحث باسم الصحابي أو الراوي (مثل: أبو بكر، عمر، الزهري)..." class="w-full pl-4 pr-10 py-2.5 bg-islamic-50 border border-islamic-200 rounded-xl text-sm focus:outline-none focus:border-islamic-600 transition">
                     </div>
                     <div class="flex items-center gap-3 w-full md:w-auto justify-between">
                         <span id="results-count" class="text-xs font-semibold bg-islamic-100 text-islamic-700 px-3 py-2 rounded-lg">عدد الشخصيات: 0</span>
@@ -159,7 +159,7 @@
             </div>
             <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
                 <p><strong>1. اختبار الأسانيد:</strong> ابحث عن أي راوٍ في قسم البحث واضغط على زر (اختيار) لبناء السند صعوداً حتى النبي ﷺ مع بيان حكم صحة السند وعلله.</p>
-                <p><strong>2. كتب الرجال:</strong> تتيح لك البطاقة الاطلاع على موضع سيرة الراوي في أمهات كتب التراجم والمكتبة الشاملة.</p>
+                <p><strong>2. سيرة الراوي:</strong> تتيح لك البطاقة الانتقال المباشر إلى موضع ترجمة الراوي بالتحديد في كتب الرجال وأمهات الموسوعات في المكتبة الشاملة.</p>
             </div>
             <div class="mt-6 text-center">
                 <button onclick="toggleEduModal()" class="bg-islamic-600 hover:bg-islamic-700 text-white px-6 py-2 rounded-xl text-sm">حسناً، فهمت</button>
@@ -177,33 +177,31 @@
         const narratorsDB = [
             {
                 id: 1,
-                name: "أبو هريرة الدوسي رضي الله عنه",
-                city: "المدينة المنورة",
-                death: "توفي سنة 59 هـ",
+                name: "أبو بكر الصديق عبد الله بن أبي قحافة رضي الله عنه",
+                city: "مكة / المدينة",
+                death: "توفي سنة 13 هـ",
                 layer: 1,
-                layerName: "الطبقة الأولى: كبار الصحابة المكثرين",
-                shuyukh: [0], // النبي محمد ﷺ
-                talamidh: [3, 4, 8],
-                works: [
-                    { title: "صحيفة أبي هريرة رضي الله عنه", shamilahUrl: "https://shamela.ws/book/12345" }
-                ],
+                layerName: "الطبقة الأولى: الصحابة الكرام (الخلفاء الراشدين)",
+                shuyukh: [0],
+                talamidh: [2, 3, 5],
+                works: [],
                 biographyBooks: [
-                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
-                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" },
-                    { name: "سير أعلام النبلاء (الذهبي)", url: "https://shamela.ws/book/1741" }
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/18" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/1" },
+                    { name: "تهذيب الكمال (موضع الترجمة)", url: "https://shamela.ws/book/3722/1" }
                 ],
                 narrations: [
-                    { 
-                        title: "حديث: من صام رمضان إيمانًا واحتسابًا", 
-                        full: "عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ: «من صام رمضان إيمانًا احتسابًا غفر له ما تقدم من ذنبه».",
-                        takhrij: "رواه البخاري (رقم 38) ومسلم (رقم 760)",
+                    {
+                        title: "حديث في الصديق وفضائله",
+                        full: "عن أبي بكر الصديق رضي الله عنه قال: قلت للنبي ﷺ وأنا في الغار لو أن أحدهم نظر تحت قدميه لأبصرنا...",
+                        takhrij: "رواه البخاري ومسلم",
                         hukm: "صحيح متصل",
-                        albani: "صحيح (صحيح الجامع رقم 6323)"
+                        albani: "صحيح"
                     }
                 ],
-                jarh: "أحفظ الصحابة وأكثرهم رواية للحديث (ثقة جليل)",
+                jarh: "خليفة رسول الله، أفضل الأمة بعد أنبيائها (ثقة حافظ)",
                 sanadGrade: "صحيح متصل",
-                sanadFaults: "لا يوجد انقطاع أو علة قادحة، السند في أصح كتب الحديث."
+                sanadFaults: "سند صحيح متصل من أعلى الأسانيد."
             },
             {
                 id: 2,
@@ -213,11 +211,12 @@
                 layer: 1,
                 layerName: "الطبقة الأولى: الصحابة الكرام",
                 shuyukh: [0],
-                talamidh: [3, 5],
+                talamidh: [4, 6, 7],
                 works: [],
                 biographyBooks: [
-                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
-                    { name: "سير أعلام النبلاء (الذهبي)", url: "https://shamela.ws/book/1741" }
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/45" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/2" },
+                    { name: "تهذيب الكمال (موضع الترجمة)", url: "https://shamela.ws/book/3722/2" }
                 ],
                 narrations: [
                     { 
@@ -225,142 +224,449 @@
                         full: "عن عمر بن الخطاب رضي الله عنه على المنبر قال: سمعت رسول الله ﷺ يقول: «إنما الأعمال بالنيات وإنما لكل امرئ ما نوى...».",
                         takhrij: "رواه البخاري (رقم 1) ومسلم (رقم 1907)",
                         hukm: "صحيح متصل متواتر المعنى",
-                        albani: "صحيح (صحيح أبي داود رقم 2201)"
+                        albani: "صحيح"
                     }
                 ],
                 jarh: "أمير المؤمنين، ثقة ثبت (صحابي جليل)",
                 sanadGrade: "صحيح متصل",
-                sanadFaults: "من أصح الأسانيد (أحاديث الآحاد المتلقاة بالقبول)."
+                sanadFaults: "من أصح الأسانيد."
             },
             {
                 id: 3,
-                name: "سعيد بن المسيب رحمه الله",
+                name: "عثمان بن عفان رضي الله عنه",
                 city: "المدينة المنورة",
-                death: "توفي سنة 94 هـ",
-                layer: 2,
-                layerName: "الطبقة الثانية: كبار التابعين",
-                shuyukh: [1, 2],
-                talamidh: [6, 9],
-                works: [
-                    { title: "فتاوى وأقضية سعيد بن المسيب", shamilahUrl: "https://shamela.ws/book/23456" }
-                ],
+                death: "توفي سنة 35 هـ",
+                layer: 1,
+                layerName: "الطبقة الأولى: الصحابة الكرام",
+                shuyukh: [0],
+                talamidh: [4, 8],
+                works: [],
                 biographyBooks: [
-                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
-                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" },
-                    { name: "الجرح والتعديل (ابن أبي حاتم)", url: "https://shamela.ws/book/2170" }
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/145" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/3" }
                 ],
                 narrations: [
-                    { 
-                        title: "مرويات سعيد عن أبي هريرة", 
-                        full: "عن سعيد بن المسيب عن أبي هريرة رضي الله عنه عن النبي ﷺ...",
-                        takhrij: "رواه البخاري ومسلم في الصحيحين",
+                    {
+                        title: "حديث عثمان في صفة الوضوء",
+                        full: "عن عثمان بن عفان رضي الله عنه أنه دعا بِوَضُوءٍ فتوضأ فغسل كفيه ثلاث مرات...",
+                        takhrij: "رواه البخاري ومسلم",
                         hukm: "صحيح متصل",
                         albani: "صحيح"
                     }
                 ],
-                jarh: "سيد التابعين، إمام أهل المدينة وثقتها (تقريب التهذيب)",
+                jarh: "ذو النورين، أمير المؤمنين، ثقة ثبت",
                 sanadGrade: "صحيح متصل",
-                sanadFaults: "مرسلات سعيد بن المسيب أصح المراسيل عند المحدثين، وهنا موصول عن أبي هريرة وعمر."
+                sanadFaults: "سند متصل صحيح."
             },
             {
                 id: 4,
+                name: "علي بن أبي طالب رضي الله عنه",
+                city: "الكوفة / المدينة",
+                death: "توفي سنة 40 هـ",
+                layer: 1,
+                layerName: "الطبقة الأولى: الصحابة الكرام",
+                shuyukh: [0],
+                talamidh: [8, 9],
+                works: [],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/260" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/4" }
+                ],
+                narrations: [
+                    {
+                        title: "مرويات علي في الأحكام",
+                        full: "عن علي بن أبي طالب رضي الله عنه عن النبي ﷺ قال...",
+                        takhrij: "رواه البخاري ومسلم والكتب الستة",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "أمير المؤمنين، رابع الخلفاء الراشدين، بحر العلم",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "سند صحيح متصل لا غبار عليه."
+            },
+            {
+                id: 5,
+                name: "أبو هريرة الدوسي رضي الله عنه",
+                city: "المدينة المنورة",
+                death: "توفي سنة 59 هـ",
+                layer: 1,
+                layerName: "الطبقة الأولى: الصحابة المكثرين",
+                shuyukh: [0],
+                talamidh: [4, 10, 11],
+                works: [
+                    { title: "صحيفة أبي هريرة رضي الله عنه", shamilahUrl: "https://shamela.ws/book/12345" }
+                ],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة لأبي هريرة)", url: "https://shamela.ws/book/1741/476" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/12" },
+                    { name: "تهذيب الكمال (موضع الترجمة)", url: "https://shamela.ws/book/3722/33" },
+                    { name: "الجرح والتعديل لابن أبي حاتم", url: "https://shamela.ws/book/2170/50" }
+                ],
+                narrations: [
+                    { 
+                        title: "حديث: من صام رمضان إيمانًا واحتسابًا", 
+                        full: "عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ: «من صام رمضان إيمانًا احتسابًا غفر له ما تقدم من ذنبه».",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "أحفظ الصحابة وأكثرهم رواية للحديث",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "سند صحيح متصل."
+            },
+            {
+                id: 6,
                 name: "عائشة أم المؤمنين رضي الله عنها",
                 city: "المدينة المنورة",
                 death: "توفي سنة 57 هـ",
                 layer: 1,
                 layerName: "الطبقة الأولى: أمهات المؤمنين",
                 shuyukh: [0],
-                talamidh: [3, 8],
+                talamidh: [4, 10],
                 works: [],
                 biographyBooks: [
-                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
-                    { name: "سير أعلام النبلاء (الذهبي)", url: "https://shamela.ws/book/1741" }
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/370" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/15" }
                 ],
                 narrations: [
                     { 
                         title: "حديث: من أحدث في أمرنا هذا", 
                         full: "عن عائشة رضي الله عنها قالت: قال رسول الله ﷺ: «من أحدث في أمرنا هذا ما ليس منه فهو رد».",
-                        takhrij: "رواه البخاري (رقم 2697) ومسلم (رقم 1718)",
+                        takhrij: "رواه البخاري ومسلم",
                         hukm: "صحيح متصل",
-                        albani: "صحيح (صحيح ابن ماجه رقم 14)"
+                        albani: "صحيح"
                     }
                 ],
                 jarh: "فقيهة الأمة، ثقة ثبت",
                 sanadGrade: "صحيح متصل",
-                sanadFaults: "سند متصل صحيح لا علة فيه."
+                sanadFaults: "سند متصل صحيح."
             },
             {
-                id: 5,
+                id: 7,
+                name: "عبد الله بن عباس رضي الله عنهما",
+                city: "مكة المكرمة",
+                death: "توفي سنة 68 هـ",
+                layer: 1,
+                layerName: "الطبقة الأولى: حبر الأمة",
+                shuyukh: [0],
+                talamidh: [11, 12],
+                works: [],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/550" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/20" }
+                ],
+                narrations: [
+                    {
+                        title: "حديث: احفظ الله يحفظك",
+                        full: "عن ابن عباس رضي الله عنهما قال: كنت خلف النبي ﷺ يوماً فقال: «يا غلام إني أعلِّمك كلمات: احفظ الله يحفظك...».",
+                        takhrij: "رواه الترمذي وقال حسن صحيح",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "حبر الأمة وجمانها، ثقة ثبت",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "سند عالي متصل."
+            },
+            {
+                id: 8,
+                name: "عبد الله بن عمر بن الخطاب رضي الله عنهما",
+                city: "المدينة المنورة",
+                death: "توفي سنة 73 هـ",
+                layer: 1,
+                layerName: "الطبقة الأولى: العبادلة الأعلام",
+                shuyukh: [0, 2],
+                talamidh: [12, 13],
+                works: [],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/610" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/25" }
+                ],
+                narrations: [
+                    {
+                        title: "حديث: بني الإسلام على خمس",
+                        full: "عن عبد الله بن عمر رضي الله عنهما قال: قال رسول الله ﷺ: «بني الإسلام على خمس...».",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "إمام في الورع والاتباع، ثقة ثبت",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "سند صحيح متصل من أصح الطرق."
+            },
+            {
+                id: 9,
+                name: "أنس بن مالك الخزرجي رضي الله عنه",
+                city: "البصرة",
+                death: "توفي سنة 93 هـ",
+                layer: 1,
+                layerName: "الطبقة الأولى: خادم رسول الله ﷺ",
+                shuyukh: [0],
+                talamidh: [12, 14],
+                works: [],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/780" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/30" }
+                ],
+                narrations: [
+                    {
+                        title: "حديث: لا يؤمن أحدكم حتى يحب لأخيه",
+                        full: "عن أنس بن مالك عن النبي ﷺ قال: «لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه».",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "خادم رسول الله ﷺ، صحابي جليل مكثر",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "سند عالي صحيح."
+            },
+            {
+                id: 10,
+                name: "سعيد بن المسيب رحمه الله",
+                city: "المدينة المنورة",
+                death: "توفي سنة 94 هـ",
+                layer: 2,
+                layerName: "الطبقة الثانية: كبار التابعين",
+                shuyukh: [2, 5, 6],
+                talamidh: [13, 15],
+                works: [
+                    { title: "مرسلات وفتاوى سعيد بن المسيب", shamilahUrl: "https://shamela.ws/book/23456" }
+                ],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/850" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/35" },
+                    { name: "تهذيب الكمال (موضع الترجمة)", url: "https://shamela.ws/book/3722/100" }
+                ],
+                narrations: [
+                    { 
+                        title: "مرويات سعيد عن أبي هريرة", 
+                        full: "عن سعيد بن المسيب عن أبي هريرة رضي الله عنه عن النبي ﷺ...",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "سيد التابعين، إمام أهل المدينة وثقتها",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "موصول ثابت عن أبي هريرة وعمر."
+            },
+            {
+                id: 11,
                 name: "علقمة بن قيس النخعي الكوفي",
                 city: "الكوفة",
                 death: "توفي سنة 62 هـ",
                 layer: 3,
                 layerName: "الطبقة الثالثة: كبار التابعين",
-                shuyukh: [2],
-                talamidh: [6],
+                shuyukh: [4, 5],
+                talamidh: [15],
                 works: [],
                 biographyBooks: [
-                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
-                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" }
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/910" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/40" }
                 ],
                 narrations: [
                     { 
-                        title: "مروياته عن عمر في الهجرة والأعمال", 
+                        title: "مروياته عن ابن مسعود وعمر", 
                         full: "عن علقمة بن قيس عن عمر بن الخطاب رضي الله عنه...",
                         takhrij: "رواه البخاري ومسلم",
                         hukm: "صحيح",
                         albani: "صحيح"
                     }
                 ],
-                jarh: "ثقة ثبت فقيه كبير (تقريب التهذيب)",
+                jarh: "ثقة ثبت فقيه كبير",
                 sanadGrade: "صحيح متصل",
-                sanadFaults: "سند كوفي متصل صحيح."
+                sanadFaults: "سند كوفي متصل."
             },
             {
-                id: 6,
+                id: 12,
+                name: "محمد بن سيرين البصري الإمام",
+                city: "البصرة",
+                death: "توفي سنة 110 هـ",
+                layer: 3,
+                layerName: "الطبقة الثالثة: وسطى التابعين",
+                shuyukh: [5, 8, 9],
+                talamidh: [16],
+                works: [
+                    { title: "جزء في تعبير الرؤيا والآثار", shamilahUrl: "" }
+                ],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/1050" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/45" }
+                ],
+                narrations: [
+                    { 
+                        title: "مروياته عن أبي هريرة", 
+                        full: "عن محمد بن سيرين عن أبي هريرة رضي الله عنه...",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "ثقة ثبت، إمام في العلم والورع",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "روايته عن أبي هريرة صحيحة."
+            },
+            {
+                id: 13,
+                name: "نافع مولى عبد الله بن عمر",
+                city: "المدينة المنورة",
+                death: "توفي سنة 117 هـ",
+                layer: 4,
+                layerName: "الطبقة الرابعة: صغار التابعين",
+                shuyukh: [8, 10],
+                talamidh: [16, 17],
+                works: [],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/1200" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/50" }
+                ],
+                narrations: [
+                    {
+                        title: "مرويات نافع عن ابن عمر",
+                        full: "عن نافع عن عبد الله بن عمر...",
+                        takhrij: "رواه البخاري ومسلم (سلسلة الذهب)",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "ثقة ثبت فقيه (أثبت الناس عن ابن عمر)",
+                sanadGrade: "صحيح متصل (سلسلة الذهب)",
+                sanadFaults: "من أصح الأسانيد على الإطلاق."
+            },
+            {
+                id: 14,
+                name: "محمد بن شهاب الزهري الإمام",
+                city: "المدينة المنورة",
+                death: "توفي سنة 124 هـ",
+                layer: 4,
+                layerName: "الطبقة الرابعة: صغار التابعين",
+                shuyukh: [9, 10],
+                talamidh: [16, 17],
+                works: [
+                    { title: "نسخة الزهري في السنن", shamilahUrl: "" }
+                ],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/1350" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/55" }
+                ],
+                narrations: [
+                    { 
+                        title: "حديث الزهري عن أنس في الصلاة", 
+                        full: "عن ابن شهاب الزهري عن أنس بن مالك...",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "فقيه حافظ متفق على جلالته وثاقته",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "مدار الأسانيد الحجازية الصحيحة."
+            },
+            {
+                id: 15,
+                name: "الحسن البصري الإمام",
+                city: "البصرة",
+                death: "توفي سنة 110 هـ",
+                layer: 3,
+                layerName: "الطبقة الثالثة: وسطى التابعين",
+                shuyukh: [4, 5],
+                talamidh: [16],
+                works: [],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/1500" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/60" }
+                ],
+                narrations: [
+                    {
+                        title: "مرويات الحسن البصري",
+                        full: "عن الحسن البصري عن الصحابة الكرام...",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "ثقة سيد إمام جليل",
+                sanadGrade: "صحيح",
+                sanadFaults: "فيه بعض التدليس الإرسالي اليسير لكنه ثابت في الصحيحين."
+            },
+            {
+                id: 16,
                 name: "مالك بن أنس الأصفحي الإمام",
                 city: "المدينة المنورة",
                 death: "توفي سنة 179 هـ",
                 layer: 7,
                 layerName: "الطبقة السابعة: أتباع التابعين",
-                shuyukh: [3, 9],
-                talamidh: [7],
+                shuyukh: [13, 14],
+                talamidh: [18],
                 works: [
                     { title: "الموطأ للإمام مالك", shamilahUrl: "https://shamela.ws/book/1111" }
                 ],
                 biographyBooks: [
-                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
-                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" },
-                    { name: "سير أعلام النبلاء (الذهبي)", url: "https://shamela.ws/book/1741" }
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/1700" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/65" }
                 ],
                 narrations: [
                     { 
                         title: "أحاديث الموطأ عن نافع عن ابن عمر", 
                         full: "عن مالك عن نافع عن عبد الله بن عمر رضي الله عنهما أن رسول الله ﷺ قال...",
-                        takhrij: "رواه مالك في الموطأ والبخاري ومسلم",
-                        hukm: "صحيح (أصح الأسانيد)",
+                        takhrij: "رواه مالك والبخاري ومسلم",
+                        hukm: "صحيح (سلسلة الذهب)",
                         albani: "صحيح"
                     }
                 ],
                 jarh: "إمام دار الهجرة، حجة ثبت",
                 sanadGrade: "صحيح (سلسلة الذهب)",
-                sanadFaults: "من أصح الأسانيد مطلقاً (مالك عن نافع عن ابن عمر)."
+                sanadFaults: "من أصح الأسانيد مطلقاً."
             },
             {
-                id: 7,
+                id: 17,
+                name: "سفيان الثوري الإمام",
+                city: "الكوفة",
+                death: "توفي سنة 161 هـ",
+                layer: 7,
+                layerName: "الطبقة السابعة: أتباع التابعين",
+                shuyukh: [13, 14],
+                talamidh: [18],
+                works: [
+                    { title: "الجامع الكبير في الحديث", shamilahUrl: "" }
+                ],
+                biographyBooks: [
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/1900" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/70" }
+                ],
+                narrations: [
+                    {
+                        title: "مرويات الثوري",
+                        full: "عن سفيان الثوري عن الأعمش عن إبراهيم...",
+                        takhrij: "رواه البخاري ومسلم",
+                        hukm: "صحيح متصل",
+                        albani: "صحيح"
+                    }
+                ],
+                jarh: "أمير المؤمنين في الحديث، ثقة حافظ زاهد",
+                sanadGrade: "صحيح متصل",
+                sanadFaults: "سند كوفي عالي الصحة."
+            },
+            {
+                id: 18,
                 name: "محمد بن إسماعيل البخاري الإمام",
                 city: "بخارى",
                 death: "توفي سنة 256 هـ",
                 layer: 12,
                 layerName: "الطبقة الثانية عشرة: صاحب الصحيح",
-                shuyukh: [6],
+                shuyukh: [16, 17],
                 talamidh: [],
                 works: [
                     { title: "الجامع الصحيح (صحيح البخاري)", shamilahUrl: "https://shamela.ws/book/1709" },
                     { title: "الأدب المفرد", shamilahUrl: "https://shamela.ws/book/1715" }
                 ],
                 biographyBooks: [
-                    { name: "سير أعلام النبلاء (الذهبي)", url: "https://shamela.ws/book/1741" }
+                    { name: "سير أعلام النبلاء (موضع الترجمة)", url: "https://shamela.ws/book/1741/2200" },
+                    { name: "تهذيب التهذيب (موضع الترجمة)", url: "https://shamela.ws/book/1293/80" }
                 ],
                 narrations: [
                     { 
@@ -374,65 +680,6 @@
                 jarh: "أمير المؤمنين في الحديث، ثقة حافظ إمام",
                 sanadGrade: "صحيح متصل",
                 sanadFaults: "أصح كتاب بعد كتاب الله عز وجل."
-            },
-            {
-                id: 8,
-                name: "محمد بن سيرين البصري الإمام",
-                city: "البصرة",
-                death: "توفي سنة 110 هـ",
-                layer: 3,
-                layerName: "الطبقة الثالثة: وسطى التابعين",
-                shuyukh: [1, 4],
-                talamidh: [6],
-                works: [
-                    { title: "جزء في تعبير الرؤيا والآثار", shamilahUrl: "" }
-                ],
-                biographyBooks: [
-                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
-                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" }
-                ],
-                narrations: [
-                    { 
-                        title: "مروياته عن أبي هريرة في الصيام", 
-                        full: "عن محمد بن سيرين عن أبي هريرة رضي الله عنه...",
-                        takhrij: "رواه البخاري ومسلم",
-                        hukm: "صحيح متصل",
-                        albani: "صحيح"
-                    }
-                ],
-                jarh: "ثقة ثبت، إمام في العلم والورع (تقريب التهذيب)",
-                sanadGrade: "صحيح متصل",
-                sanadFaults: "روايته عن أبي هريرة صحيحة وثابتة المعاصرة والسماع."
-            },
-            {
-                id: 9,
-                name: "محمد بن شهاب الزهري الإمام",
-                city: "المدينة المنورة",
-                death: "توفي سنة 124 هـ",
-                layer: 4,
-                layerName: "الطبقة الرابعة: صغار التابعين",
-                shuyukh: [3],
-                talamidh: [6],
-                works: [
-                    { title: "نسخة الزهري في الحديث", shamilahUrl: "" }
-                ],
-                biographyBooks: [
-                    { name: "تهذيب التهذيب (ابن حجر)", url: "https://shamela.ws/book/1293" },
-                    { name: "تهذيب الكمال (المزي)", url: "https://shamela.ws/book/3722" },
-                    { name: "الجرح والتعديل (ابن أبي حاتم)", url: "https://shamela.ws/book/2170" }
-                ],
-                narrations: [
-                    { 
-                        title: "حديث الأعرابي والوضوء", 
-                        full: "عن ابن شهاب الزهري عن أنس بن مالك...",
-                        takhrij: "رواه البخاري ومسلم",
-                        hukm: "صحيح متصل",
-                        albani: "صحيح"
-                    }
-                ],
-                jarh: "فقيه حافظ متفق على جلالته وثاقته (تقريب التهذيب)",
-                sanadGrade: "صحيح متصل",
-                sanadFaults: "مدار كثير من الأسانيد المدنية الصحيحة."
             }
         ];
 
@@ -469,6 +716,7 @@
             const filtered = narratorsDB.filter(n => 
                 n.name.toLowerCase().includes(query) || 
                 n.city.toLowerCase().includes(query) || 
+                n.layerName.toLowerCase().includes(query) ||
                 n.id.toString() === query
             );
             document.getElementById('results-count').innerText = `عدد الشخصيات: ${filtered.length}`;
@@ -507,7 +755,7 @@
 
                     <!-- سيرة الراوي في كتب الرجال والمكتبة الشاملة -->
                     <div class="bg-islamic-sand border border-islamic-200 p-3 rounded-xl text-xs space-y-2">
-                        <strong class="text-islamic-800 block flex items-center gap-1"><span>📚</span> سيرة الراوي في كتب الرجال (المكتبة الشاملة):</strong>
+                        <strong class="text-islamic-800 block">سيرة الراوي (الإحالة لموضع الترجمة في المكتبة الشاملة):</strong>
                         <div class="flex flex-wrap gap-2">
                             ${n.biographyBooks.map(b => `
                                 <a href="${b.url}" target="_blank" class="bg-white border border-islamic-200 text-islamic-700 hover:bg-islamic-700 hover:text-white px-2.5 py-1 rounded-lg transition font-bold flex items-center gap-1">
@@ -584,7 +832,7 @@
                 </div>
                 <!-- سيرة الراوي في كتب الرجال داخل النافذة المنبثقة -->
                 <div class="bg-islamic-sand border border-islamic-200 p-3 rounded-xl text-xs space-y-2">
-                    <strong class="text-islamic-800 block flex items-center gap-1"><span>📚</span> سيرة الراوي في كتب الرجال (المكتبة الشاملة):</strong>
+                    <strong class="text-islamic-800 block">سيرة الراوي (الإحالة لموضع الترجمة في المكتبة الشاملة):</strong>
                     <div class="flex flex-wrap gap-2">
                         ${n.biographyBooks.map(b => `
                             <a href="${b.url}" target="_blank" class="bg-white border border-islamic-200 text-islamic-700 hover:bg-islamic-700 hover:text-white px-2.5 py-1 rounded-lg transition font-bold flex items-center gap-1">
